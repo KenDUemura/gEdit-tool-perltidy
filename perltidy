@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+use Perl::Tidy;
+
+$doc = "";
+while (<>) {
+    $doc .= $_;
+}
+
+my $destination;
+my $stderr_string;
+my $errorfile_string;
+$argv = "-npro";
+$argv .= " -pbp";
+$argv .= " -nst";
+$argv .= " -ce";
+$argv .= " -fnl";
+$argv .= " -fbl";
+$argv .= " -l=0";
+$argv .= " -i=4";
+$argv .= " -se";
+$argv .= " -ple";
+
+my $error_flag = Perl::Tidy::perltidy(
+    argv        => $argv,
+    source      => \$doc,
+    destination => \$destination,
+    #	stderr      => \$std_error,
+    errorfile => \$error_string
+);
+
+if ($error_flag) {
+    print "<<STDERR>>\n$std_error\n";
+    die "Error\n";
+}
+
+if ($destination)  { print $destination; }
+if ($std_error)    { print "<<STDERR>>\n$std_error\n"; }
+if ($error_string) { print "<<ERROR STRING>>\n$error_string\n"; }
